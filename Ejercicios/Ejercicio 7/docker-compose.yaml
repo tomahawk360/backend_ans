@@ -1,0 +1,33 @@
+version: '3'
+services:
+    database:
+        image: mysql
+        container_name: mysql_db-3
+        ports:
+            - 3310:3308
+        environment: 
+            MYSQL_ROOT_PASSWORD: 'rot123'
+            MYSQL_DATABASE: 'compania'
+        volumes:
+            - ./db/:/docker-entrypoint-initdb.d
+        networks:
+            network:
+                aliases:
+                    - database-3
+    node-app-3:
+        build: 
+            context: ./app
+            dockerfile: dockerfile
+        container_name: index_js
+        entrypoint: npm run dev
+        ports:
+            - 5002:3500
+        volumes: 
+            - ./app:/app
+        networks: 
+            network:
+                aliases: 
+                    - node-app-3
+networks:
+    network:
+        name: network-3
